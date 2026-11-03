@@ -7,5 +7,10 @@
     { "pattern": "chocopump.com", "custom_domain": true },
     { "pattern": "www.chocopump.com/*", "zone_name": "chocopump.com" }
   ],
-  "vars": { "LEAD_TO": "info@chocopump.com", "LEAD_FROM": "Chocopump website <website@whimgoods.com>" }
+  "vars": { "LEAD_TO": "info@chocopump.com" },
+  "send_email": [
+    { "name": "EMAIL", "allowed_destination_addresses": ["info@chocopump.com"] },
+    { "name": "REPLY", "allowed_sender_addresses": ["info@chocopump.com"] }
+  ],
+  "observability": { "enabled": true }
 }
