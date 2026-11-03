@@ -42,7 +42,7 @@
   $$("[data-buy]").forEach(function (b) {
     var key = b.dataset.buy, m = M[key]; if (!m) return;
     if (m.soldOut) b.textContent = S.soldBtn;
-    else if (m.checkout) { b.href = m.checkout; return; }
+    else if (m.checkout) { var lg = (document.documentElement.lang || "en").slice(0, 2); b.href = m.checkout + (lg !== "en" ? "?locale=" + lg : ""); b.rel = "noopener"; return; }
     b.addEventListener("click", function (e) { e.preventDefault(); openReserve(key); });
   });
   if (dlg) {

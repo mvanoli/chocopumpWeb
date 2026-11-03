@@ -1,8 +1,8 @@
 // Edit this file to change prices, limited-lot quantities and checkout links.
 window.CHOCOPUMP = {
   models: {
-    pro:    { name: "Chocopump PRO",    price: 569, lotUnits: 30, soldOut: false, checkout: "" },
-    deluxe: { name: "Chocopump DELUXE", price: 599, lotUnits: 40, soldOut: false, checkout: "" },
+    pro:    { name: "Chocopump PRO",    price: 569, lotUnits: 30, soldOut: false, checkout: "https://buy.stripe.com/bJe9AV3zfb1W6cF2jY3F601" },
+    deluxe: { name: "Chocopump DELUXE", price: 599, lotUnits: 40, soldOut: false, checkout: "https://buy.stripe.com/7sY9AV2vbfic8kNaQu3F600" },
   },
   // checkout: paste each Stripe Payment Link (Whimgoods LLC account). Set "Limit the number of payments"
   // on the link to lotUnits so Stripe stops selling when the lot is gone.
