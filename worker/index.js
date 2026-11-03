@@ -61,6 +61,12 @@ export default {
       if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
       return lead(request, env);
     }
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (url.pathname.startsWith("/img/")) {
+      const r = new Response(res.body, res);
+      r.headers.set("Access-Control-Allow-Origin", "*");
+      return r;
+    }
+    return res;
   },
 };
