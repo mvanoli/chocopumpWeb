@@ -10,8 +10,7 @@ T = {
 "en": {
     "locale": "en_US", "ticker_label": "Announcements", "nav_label": "Main", "lang_label": "Language",
     "ticker": ["<span class='it'>Edizione limitata</span> Limited lots available in the USA", "Free shipping on every order",
-               "<span class='it'>Fatto a mano in Italia</span> Handmade in Italy, in small lots", "12-month warranty, first spare part free",
-               "PRO $569, DELUXE $599"],
+               "<span class='it'>Fatto a mano in Italia</span> Handmade in Italy, in small lots", "12-month warranty, first spare part free"],
     "nav_compare": "Compare", "nav_faq": "Questions", "nav_shop": "Shop now", "close": "Close",
     "res_p": "Leave your details and we'll email you a secure payment link, free shipping included.",
     "f_name": "Your name", "f_company": "Business", "f_email": "Email", "f_units": "Units", "f_zip": "Shipping ZIP code",
@@ -84,7 +83,7 @@ T = {
 "it": {
     "locale": "it_IT", "ticker_label": "Avvisi", "nav_label": "Menu principale", "lang_label": "Lingua",
     "ticker": ["<span class='it'>Edizione limitata</span> Lotti limitati disponibili negli USA", "Spedizione gratuita su ogni ordine",
-               "<span class='it'>Fatto a mano in Italia</span> In piccoli lotti", "Garanzia 12 mesi, primo ricambio gratuito", "PRO $569, DELUXE $599"],
+               "<span class='it'>Fatto a mano in Italia</span> In piccoli lotti", "Garanzia 12 mesi, primo ricambio gratuito"],
     "nav_compare": "Confronta", "nav_faq": "Domande", "nav_shop": "Acquista", "close": "Chiudi",
     "res_p": "Lascia i tuoi dati e ti invieremo via email un link di pagamento sicuro, spedizione gratuita inclusa.",
     "f_name": "Nome", "f_company": "Attività", "f_email": "Email", "f_units": "Pezzi", "f_zip": "CAP di spedizione (USA)",
@@ -157,7 +156,7 @@ T = {
 "es": {
     "locale": "es_US", "ticker_label": "Avisos", "nav_label": "Menú principal", "lang_label": "Idioma",
     "ticker": ["<span class='it'>Edizione limitata</span> Lotes limitados disponibles en EE. UU.", "Envío gratis en todos los pedidos",
-               "<span class='it'>Fatto a mano in Italia</span> Hecho a mano en Italia, en lotes pequeños", "Garantía de 12 meses, primer repuesto gratis", "PRO $569, DELUXE $599"],
+               "<span class='it'>Fatto a mano in Italia</span> Hecho a mano en Italia, en lotes pequeños", "Garantía de 12 meses, primer repuesto gratis"],
     "nav_compare": "Comparar", "nav_faq": "Preguntas", "nav_shop": "Comprar", "close": "Cerrar",
     "res_p": "Déjanos tus datos y te enviaremos por correo un enlace de pago seguro, con envío gratis incluido.",
     "f_name": "Tu nombre", "f_company": "Negocio", "f_email": "Correo", "f_units": "Unidades", "f_zip": "Código postal de envío",

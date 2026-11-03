@@ -44,6 +44,7 @@ def head(lang, page, title, desc, schema="", noindex=False):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="msvalidate.01" content="5DDAF8BF81D7398D9845422DD4CCDC00">
 <title>{title}</title>
 <meta name="description" content="{desc}">
 {'<meta name="robots" content="noindex">' if noindex else ''}
@@ -132,6 +133,7 @@ def foot(lang, page, mbar=""):
   </div>
 </footer>
 <script src="{a('js/main.js')}" defer></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{{"token": "7783a49715ba48d98e72f466250c8aec"}}'></script>
 </body>
 </html>
 """
