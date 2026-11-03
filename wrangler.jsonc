@@ -1,0 +1,11 @@
+{
+  "name": "chocopump",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  "routes": [
+    { "pattern": "chocopump.com", "custom_domain": true },
+    { "pattern": "www.chocopump.com/*", "zone_name": "chocopump.com" }
+  ],
+  "vars": { "LEAD_TO": "info@chocopump.com", "LEAD_FROM": "Chocopump website <website@whimgoods.com>" }
+}
