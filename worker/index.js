@@ -89,6 +89,17 @@ export default {
       return lead(request, env);
     }
     const res = await env.ASSETS.fetch(request);
+    // Rewrite internal links "x/index.html" -> "x/" so Google never hits a redirect.
+    if ((res.headers.get("Content-Type") || "").includes("text/html")) {
+      return new HTMLRewriter().on("a[href]", {
+        element(el) {
+          const h = el.getAttribute("href");
+          if (!h || /^[a-z]+:|^\/\//i.test(h)) return;
+          const clean = h.replace(/(^|\/)index\.html(?=#|$)/, "$1");
+          if (clean !== h) el.setAttribute("href", clean === "" || clean.startsWith("#") ? "./" + clean : clean);
+        },
+      }).transform(res);
+    }
     if (url.pathname.startsWith("/img/")) {
       const r = new Response(res.body, res);
       r.headers.set("Access-Control-Allow-Origin", "*");
