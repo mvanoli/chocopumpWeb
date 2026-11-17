@@ -20,7 +20,8 @@ def depth(lang, page):
 
 def link(lang_from, page_from, lang_to, page_to, anchor=""):
     up = "../" * depth(lang_from, page_from)
-    return f"{up}{PFX[lang_to]}{PAGES[page_to]}index.html{anchor}"
+    path = f"{up}{PFX[lang_to]}{PAGES[page_to]}"
+    return f"{path or './'}{anchor}"  # clean URLs: "pro/", never "pro/index.html"
 
 
 def asset(lang, page, path):
