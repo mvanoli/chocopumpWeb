@@ -50,11 +50,38 @@ async function lead(request, env) {
   return json({ ok: true });
 }
 
+// Old Shopify URLs (still in Google's index) -> new pages, permanent 301.
+const LEGACY = {
+  "/products/chocopump-deluxe": "/deluxe/",
+  "/products/chocopump-pro": "/pro/",
+  "/products/nutella-compatible-dispenser-by-chocopump-mess-free-dispenser-for-nutella-foodservice-3kg-tub": "/",
+  "/pages/contact": "/#reserve",
+  "/policies/privacy-policy": "/privacy/",
+  "/policies/terms-of-service": "/terms/",
+  "/policies/refund-policy": "/shipping-returns/",
+  "/policies/shipping-policy": "/shipping-returns/",
+};
+const LEGACY_PREFIX = /^\/(products|collections|pages|policies|blogs|cart|account|search)(\/|$)/;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname === "www.chocopump.com") {
+    if (url.hostname === "www.chocopump.com" || url.protocol === "http:") {
       url.hostname = "chocopump.com";
+      url.protocol = "https:";
+      return Response.redirect(url.toString(), 301);
+    }
+    const p = url.pathname.replace(/\/+$/, "") || "/";
+    if (LEGACY[p] || LEGACY_PREFIX.test(url.pathname)) {
+      return Response.redirect("https://chocopump.com" + (LEGACY[p] || "/"), 301);
+    }
+    // Clean URLs: /pro/index.html -> /pro/, /pro -> /pro/ (301 instead of the default 307)
+    if (url.pathname.endsWith("/index.html")) {
+      url.pathname = url.pathname.slice(0, -10);
+      return Response.redirect(url.toString(), 301);
+    }
+    if (!url.pathname.endsWith("/") && !/\.[a-z0-9]+$/i.test(url.pathname) && !url.pathname.startsWith("/api/")) {
+      url.pathname += "/";
       return Response.redirect(url.toString(), 301);
     }
     if (url.pathname === "/api/lead") {
