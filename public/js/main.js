@@ -18,7 +18,23 @@
   };
   S = S[L] || S.en;
 
+  // Analytics: every event goes through track(), so a missing or blocked tag never breaks the page.
+  var track = function (name, params) { try { if (window.gtag) window.gtag("event", name, params || {}); } catch (e) {} };
+  var item = function (key, qty) { var m = M[key]; return { item_id: "CHOCOPUMP-" + key.toUpperCase(), item_name: m.name, item_brand: "Chocopump", price: m.price, quantity: qty || 1 }; };
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
+  // Thank-you page: Stripe sends buyers to /thank-you/?m=pro&sid={CHECKOUT_SESSION_ID}
+  if ($("[data-thanks]")) {
+    var q = new URLSearchParams(location.search), bought = q.get("m"), sid = q.get("sid") || "";
+    var want = store.get("cp_lang");
+    if (L === "en" && (want === "it" || want === "es")) { location.replace("/" + want + "/thank-you/" + location.search); return; }
+    if (M[bought] && /^cs_[A-Za-z0-9_]+$/.test(sid) && !store.get("cp_tx_" + sid)) {
+      store.set("cp_tx_" + sid, "1");
+      track("purchase", { transaction_id: sid, currency: "USD", value: M[bought].price, items: [item(bought)] });
+    }
+  }
+  var viewed = $("[data-view]");
+  if (viewed && M[viewed.dataset.view]) track("view_item", { currency: "USD", value: M[viewed.dataset.view].price, items: [item(viewed.dataset.view)] });
 
   // Prices and limited-lot quantities
   $$("[data-price]").forEach(function (el) { var m = M[el.dataset.price]; if (m) el.textContent = money(m.price); });
@@ -42,7 +58,11 @@
   $$("[data-buy]").forEach(function (b) {
     var key = b.dataset.buy, m = M[key]; if (!m) return;
     if (m.soldOut) b.textContent = S.soldBtn;
-    else if (m.checkout) { var lg = (document.documentElement.lang || "en").slice(0, 2); b.href = m.checkout + (lg !== "en" ? "?locale=" + lg : ""); b.rel = "noopener"; return; }
+    else if (m.checkout) {
+      b.href = m.checkout + (L !== "en" ? "?locale=" + L : ""); b.rel = "noopener";
+      b.addEventListener("click", function () { store.set("cp_lang", L); track("begin_checkout", { currency: "USD", value: m.price, items: [item(key)] }); });
+      return;
+    }
     b.addEventListener("click", function (e) { e.preventDefault(); openReserve(key); });
   });
   if (dlg) {
@@ -61,7 +81,13 @@
       var btn = $('button[type="submit"]', f), label = btn.textContent; btn.disabled = true; btn.textContent = S.sending;
       fetch("/api/lead", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
         .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(function () { status.textContent = data.kind === "reserve" ? S.okRes : S.okQ; status.classList.add("ok"); f.reset(); })
+        .then(function () {
+          var key = Object.keys(M).find(function (k) { return M[k].name === data.model; }), units = Math.max(1, parseInt(data.units, 10) || 1);
+          var ev = { lead_type: data.kind, units: units };
+          if (key) { ev.currency = "USD"; ev.value = M[key].price * units; ev.items = [item(key, units)]; }
+          track("generate_lead", ev);
+          status.textContent = data.kind === "reserve" ? S.okRes : S.okQ; status.classList.add("ok"); f.reset();
+        })
         .catch(function () { status.textContent = S.err(C.contactEmail); status.classList.add("err"); })
         .finally(function () { btn.disabled = false; btn.textContent = label; });
     });
@@ -71,6 +97,7 @@
   $$(".vid[data-yt]").forEach(function (v) {
     v.addEventListener("click", function () {
       if ($("iframe", v)) return;
+      track("video_play", { video_id: v.dataset.yt });
       var f = document.createElement("iframe");
       f.src = "https://www.youtube-nocookie.com/embed/" + v.dataset.yt + "?autoplay=1&rel=0";
       f.allow = "autoplay; encrypted-media; picture-in-picture"; f.allowFullscreen = true; f.title = v.getAttribute("aria-label");

@@ -75,6 +75,12 @@ export default {
     if (LEGACY[p] || LEGACY_PREFIX.test(url.pathname)) {
       return Response.redirect("https://chocopump.com" + (LEGACY[p] || "/"), 301);
     }
+    // Old thank-you URL (may still be set as a Stripe redirect): keep the query so the purchase is still measured.
+    const ty = url.pathname.match(/^\/((?:it|es)\/)?thank-you\.html$/);
+    if (ty) {
+      url.pathname = `/${ty[1] || ""}thank-you/`;
+      return Response.redirect(url.toString(), 301);
+    }
     // Clean URLs: /pro/index.html -> /pro/, /pro -> /pro/ (301 instead of the default 307)
     if (url.pathname.endsWith("/index.html")) {
       url.pathname = url.pathname.slice(0, -10);

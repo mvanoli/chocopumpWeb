@@ -12,6 +12,10 @@ PAGES = {"home": "", "pro": "pro/", "deluxe": "deluxe/", "terms": "terms/", "pri
          "shipping": "shipping-returns/", "warranty": "warranty/", "thanks": "thank-you/"}
 PRICE = {"pro": 569, "deluxe": 599}
 EMAIL = "info@chocopump.com"
+GA4 = "G-G50BHT3S93"  # Google Analytics 4, account "Whimgoods" > property "Chocopump". Empty string turns analytics off.
+ANALYTICS = (f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA4}"></script>\n'
+             "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}"
+             f"gtag('js',new Date());gtag('config','{GA4}');</script>") if GA4 else ""
 
 
 def depth(lang, page):
@@ -61,6 +65,7 @@ def head(lang, page, title, desc, schema="", noindex=False):
 <link rel="preload" href="{a('fonts/bodoni-moda-latin-500-normal.woff2')}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{a('css/site.css')}">
 <script src="{a('js/config.js')}"></script>
+{ANALYTICS}
 {schema}
 </head>
 <body>
@@ -427,7 +432,7 @@ def product(lang, key):
 <main>
 <div class="wrap">
   <p class="crumbs"><a href="{L('home')}">Chocopump</a> / {key.upper()}</p>
-  <div class="pp">
+  <div class="pp" data-view="{key}">
     <div>
       <div class="main pic-wrap{' cover' if first[2] == 'cover' else ''}" id="main-img"><img src="{a('img/' + first[0])}" alt="{first[1]}" fetchpriority="high"><span class="flag-badge"><span class="flag" aria-hidden="true"></span>{t['made']}</span></div>
       <div class="thumbs" data-target="#main-img">{thumbs}</div>
@@ -501,7 +506,7 @@ def legal(lang, page):
 def thanks(lang):
     t = T[lang]; page = "thanks"
     html = head(lang, page, f"Grazie | Chocopump", t["thanks_h"], noindex=True)
-    html += (f'<main class="dark" style="min-height:70vh;display:flex;align-items:center"><div class="wrap" style="max-width:780px;padding-top:80px;padding-bottom:80px">'
+    html += (f'<main class="dark" data-thanks style="min-height:70vh;display:flex;align-items:center"><div class="wrap" style="max-width:780px;padding-top:80px;padding-bottom:80px">'
              f'<p class="kicker">Grazie mille</p><h1 style="font-size:clamp(44px,6vw,76px)">{t["thanks_h"]}</h1>'
              f'<p class="lede" style="margin-top:24px">{t["thanks_p"]}</p><p style="margin-top:30px"><a class="btn" href="{link(lang, page, lang, "home")}">{t["thanks_btn"]}</a></p></div></main>')
     write(lang, page, html + foot(lang, page))
