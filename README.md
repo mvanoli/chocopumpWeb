@@ -16,6 +16,16 @@ Static sales page + a small Cloudflare Worker (same approach as whimgoods.com).
 4. In Stripe (Whimgoods LLC account): create one product per version at $599, a Payment Link each with
    - shipping address collection on (US only), no shipping charge
    - "Limit the number of payments" = lot size (30 PRO / 40 DELUXE)
-   - after payment, redirect to https://chocopump.com/thank-you.html
+   - after payment, redirect to `https://chocopump.com/thank-you/?m=pro&sid={CHECKOUT_SESSION_ID}` on the PRO link and
+     `https://chocopump.com/thank-you/?m=deluxe&sid={CHECKOUT_SESSION_ID}` on the DELUXE link. Stripe fills in the session id;
+     the page needs both `m` and `sid` to report the purchase to Google Analytics (once per order).
    Paste the two links into `public/js/config.js` and redeploy. Until then, buy buttons open the reserve form.
 5. When a lot sells out, set `proSoldOut` / `deluxeSoldOut` to true; for a new lot, bump `lot.number` and the sizes.
+
+## Analytics
+Google Analytics 4 (`GA4` in `build.py`, account "Whimgoods", property "Chocopump") is loaded on every page. `public/js/main.js` sends:
+- `view_item` on the PRO and DELUXE pages
+- `begin_checkout` when a buy button sends the visitor to Stripe
+- `generate_lead` when the reserve or bulk-quote form is sent
+- `video_play` when a video is started
+- `purchase` on the thank-you page, with the price from `config.js` (one unit, before tax)
